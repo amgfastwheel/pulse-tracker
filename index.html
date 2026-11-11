@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Pulse — Income &amp; Expense Tracker</title>
 <meta name="theme-color" content="#1a1220">
 <meta name="description" content="Track income and expenses, compare months, and record Apple Pay spends via Shortcuts.">
@@ -358,7 +358,10 @@
   </section>
 
   <footer>
-    Saved on this device only. <button id="clearBtn">Clear all data</button>
+    Saved on this device only.
+    <button id="exportBtn">Export data</button> ·
+    <button id="clearBtn">Clear all data</button><br>
+    <a href="./dashboard.html" style="color:var(--accent);">Open dashboard →</a>
   </footer>
 </div>
 
@@ -761,6 +764,18 @@
       state = defaultState();
       save(); render();
     }
+  });
+
+  document.getElementById('exportBtn').addEventListener('click', () => {
+    const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'pulse-data.json';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
   });
 
   // ---------- init ----------
